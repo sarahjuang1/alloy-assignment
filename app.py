@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Alloy Script 
-  1) We are prompting the applicant for their info
+Alloy Script Overview
+  1) We are asking the applicant for their info
   2) Calls Alloy's Sandbox API
-  3) Decision based on response.summary.outcome.
+  3) Returns a decision based on response.summary.outcome.
 
-Instruction:
-  - Add credentials to a private local `.env`
+How to run:
+  - Add credentials to a local `.env`
   - Run: python app.py
 """
 
@@ -45,8 +45,8 @@ def validate_dob(dob: str) -> bool:
 
 def validate_age_realistic(dob: str) -> bool:
     """
-    Validate that the date of birth is realistic. Applicant is between 18 and 120 years old.
-    Returns True if valid, False is invalid.
+    Validation that the date of birth is realistic. Applicant is between 18 and 120 years old.
+    Returns True if valid, False is invalid. We want to reject any unrealistic ages to reduce manual review.
     """
     try:
         dob_dt = datetime.strptime(dob.strip(), "%Y-%m-%d").date()
@@ -84,7 +84,7 @@ VALID_STATES = {
 
 def validate_state_code(state: str) -> bool:
     """
-    Returns True if the state is a valid 2-letter US State.
+    Returns True if the state is a valid 2-letter US State. Rejects non-valid 2-letter values.
     """
     return state.upper() in VALID_STATES
 
@@ -116,7 +116,7 @@ def post_evaluation(base_url: str, auth: Tuple[str,str], payload: dict) -> reque
     resp = requests.post(url, auth=auth, headers=headers, json=payload, timeout=30)
     return resp
 
-# Main section - running script
+# Main section - running the script
 # Includes the welcome message, adds credentials and gets parameters
 # Asks for applicant information
 # Builds the payload and calls post_evaluation to send data
