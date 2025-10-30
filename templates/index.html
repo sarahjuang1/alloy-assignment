@@ -144,13 +144,12 @@
 
       try {
         const res = await fetch('/evaluate', { method: 'POST', body: formData });
-        const text = await res.text();              // read raw text first
+        const text = await res.text();
         let data;
 
       try {
-        data = JSON.parse(text);                  // try to parse as JSON
+        data = JSON.parse(text);
       } catch {
-        // Not JSON → show the raw response so we can see the Flask error/traceback
         out.innerHTML = `<div class="err"><b>Non-JSON response from server</b><pre>${text}</pre></div>`;
         return;
       }
