@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 # --- Flask Setup ---
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-# --- Load API Credentials ---
+# --- Load Credentials ---
 def load_credentials() -> Tuple[str, str, str]:
     load_dotenv()
     base_url = os.getenv("ALLOY_BASE_URL", "https://sandbox.alloy.co/v1").rstrip("/")
@@ -34,7 +34,7 @@ def load_credentials() -> Tuple[str, str, str]:
     return base_url, token, secret
 
 
-# --- Helper: Post Applicant Evaluation to Alloy ---
+# --- Post Applicant Evaluation to Alloy ---
 def post_evaluation(base_url: str, auth: Tuple[str, str], payload: dict):
     """Send applicant data to Alloy’s sandbox API"""
     url = f"{base_url}/evaluations"
@@ -42,7 +42,7 @@ def post_evaluation(base_url: str, auth: Tuple[str, str], payload: dict):
     return requests.post(url, auth=auth, headers=headers, json=payload, timeout=30)
 
 
-# --- Validation Helpers ---
+# --- Validation ---
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 VALID_STATES = {
     "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
@@ -71,7 +71,6 @@ def validate_ssn(ssn: str) -> bool:
     return ssn.isdigit() and len(ssn) == 9
 
 
-# --- Routes ---
 @app.get("/")
 def index():
     return render_template("index.html")
@@ -104,7 +103,7 @@ def evaluate():
         if errors:
             return jsonify({"ok": False, "errors": errors}), 400
 
-        # --- Build Payload for Alloy API ---
+        # --- Build Payload ---
         payload = {
             "name_first": form.get("name_first"),
             "name_last": form.get("name_last"),
@@ -147,6 +146,6 @@ def evaluate():
         return jsonify({"ok": False, "errors": [str(e)]}), 500
 
 
-# --- Run Flask App ---
+# --- Run App ---
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
