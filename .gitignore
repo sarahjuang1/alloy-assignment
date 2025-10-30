@@ -10,4 +10,3 @@ venv/
 # IDEs
 .vscode/
 .idea/
-server.py
