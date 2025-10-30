@@ -34,7 +34,7 @@ def load_credentials() -> Tuple[str, str, str]:
     return base_url, token, secret
 
 
-# --- Post Applicant Evaluation to Alloy ---
+# --- Post evaluation to Alloy ---
 def post_evaluation(base_url: str, auth: Tuple[str, str], payload: dict):
     """Send applicant data to Alloy’s sandbox API"""
     url = f"{base_url}/evaluations"
